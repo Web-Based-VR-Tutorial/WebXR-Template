@@ -22,7 +22,7 @@ module.exports = merge(common, {
         useLocalIp: true,
         host: '0.0.0.0', 
 
-        // enable to use WebXR
-        https: true,
+        // if you aren’t using ngrok, and want to connect locally, webxr requires https
+        // https: true,
     }    
 });
