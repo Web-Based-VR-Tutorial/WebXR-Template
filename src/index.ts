@@ -77,7 +77,7 @@ class Game
         // Create an IcoSphere
         var sphere = MeshBuilder.CreateIcoSphere("sphere", 
                            {radius:0.2, flat:true, subdivisions: 1}, this.scene);
-        sphere.position.y = 3;
+        sphere.position = new Vector3(-0.4, 1.6, 0);
         sphere.material = new StandardMaterial("sphere material", this.scene)
     
         // Light
@@ -86,7 +86,7 @@ class Game
 
         // Camera
         var camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 4, 3, 
-                                         new Vector3(0, 3, 0), this.scene);
+                                         new Vector3(0, 1.6, 0), this.scene);
         camera.attachControl(this.canvas, true);
         camera.beta += 0.8;
     
@@ -117,7 +117,7 @@ class Game
     
         // GUI: create a 2D GUI as a dynamic texture on a plane
         var plane = MeshBuilder.CreatePlane("plane",{});
-        plane.position = new Vector3(0.4, 4, 0.4)
+        plane.position = new Vector3(0.4, 1.6, 0);
         var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
         var panel = new StackPanel();    
         advancedTexture.addControl(panel);  
@@ -128,7 +128,7 @@ class Game
         header.height = "100px";
         header.color = "white";
         header.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
-        header.fontSize = "120"
+        header.fontSize = "120";
         panel.addControl(header); 
         
         var picker = new ColorPicker();
