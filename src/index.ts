@@ -90,9 +90,17 @@ class Game
         camera.attachControl(this.canvas, true);
         camera.beta += 0.8;
     
+        // the defaultEnvironment helper puts the virtual floor just below the content of the 
+        // scene, and makes a bit enough skybox to enclose it all.  We'll create a little 
+        // sphere at y=0 so it does the right thing
+        var tinySphere = MeshBuilder.CreateIcoSphere("tiny sphere", 
+        {radius:0.002, flat:true, subdivisions: 1}, this.scene);
+        tinySphere.position = new Vector3(-0.4, 0, 0);
+        tinySphere.material = new StandardMaterial("sphere material", this.scene)
+
         // Default Environment
-        var environment = this.scene.createDefaultEnvironment({ enableGroundShadow: true,    
-                                                                groundYBias: 2.8 });
+        var environment = this.scene.createDefaultEnvironment({ enableGroundShadow: true}    
+                                                                );
         environment!.setMainColor(Color3.FromHexString("#74b9ff"))
         
         // Shadows for the light created above
@@ -130,7 +138,7 @@ class Game
         header.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
         header.fontSize = "120";
         panel.addControl(header); 
-        
+
         var picker = new ColorPicker();
         picker.value = (sphere.material as StandardMaterial).diffuseColor;
         picker.horizontalAlignment =  Control.HORIZONTAL_ALIGNMENT_CENTER;
