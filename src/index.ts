@@ -74,15 +74,17 @@ class Game
 
     private async createScene() 
     {
-        // Create simple sphere
+        // Create an IcoSphere
         var sphere = MeshBuilder.CreateIcoSphere("sphere", 
                            {radius:0.2, flat:true, subdivisions: 1}, this.scene);
         sphere.position.y = 3;
         sphere.material = new StandardMaterial("sphere material", this.scene)
     
-        // Lights and camera
+        // Light
         var light = new DirectionalLight("light", new Vector3(0, -0.5, 1.0), this.scene);
         light.position = new Vector3(0, 5, -2);
+
+        // Camera
         var camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 4, 3, 
                                          new Vector3(0, 3, 0), this.scene);
         camera.attachControl(this.canvas, true);
@@ -93,17 +95,18 @@ class Game
                                                                 groundYBias: 2.8 });
         environment!.setMainColor(Color3.FromHexString("#74b9ff"))
         
-        // Shadows
+        // Shadows for the light created above
         var shadowGenerator = new ShadowGenerator(1024, light);
         shadowGenerator.useBlurExponentialShadowMap = true;
         shadowGenerator.blurKernel = 32;
         shadowGenerator.addShadowCaster(sphere, true);
     
-        // XR stuff
+        // Initialize WebXR
         const xrHelper = await this.scene.createDefaultXRExperienceAsync({
                 floorMeshes: [environment!.ground!]
         });
         const availableFeatures = WebXRFeaturesManager.GetAvailableFeatures();
+        console.log("WebXR Features:")
         console.log(availableFeatures)
 
         // Runs every frame to rotate the sphere
@@ -112,12 +115,14 @@ class Game
             sphere.rotation.x += 0.0001*this.scene.getEngine().getDeltaTime();
         })
     
-        // GUI
+        // GUI: create a 2D GUI as a dynamic texture on a plane
         var plane = MeshBuilder.CreatePlane("plane",{});
         plane.position = new Vector3(0.4, 4, 0.4)
         var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
         var panel = new StackPanel();    
         advancedTexture.addControl(panel);  
+
+        // populate the panel with title and colorpicker
         var header = new TextBlock();
         header.text = "Color GUI";
         header.height = "100px";
@@ -125,6 +130,7 @@ class Game
         header.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
         header.fontSize = "120"
         panel.addControl(header); 
+        
         var picker = new ColorPicker();
         picker.value = (sphere.material as StandardMaterial).diffuseColor;
         picker.horizontalAlignment =  Control.HORIZONTAL_ALIGNMENT_CENTER;
